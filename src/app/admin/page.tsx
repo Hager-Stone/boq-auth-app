@@ -51,6 +51,7 @@ export default function AdminPage() {
   return (
     <AdminGuard>
       <div className="p-6">
+        <UserInfo />
         <h1 className="text-2xl font-semibold mb-4">🔐 Admin - Access Control</h1>
         {requests.length === 0 ? (
           <p className="text-gray-500">No access requests yet.</p>
