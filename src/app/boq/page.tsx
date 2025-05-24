@@ -374,7 +374,7 @@ export default function BoqPage() {
                 )}
               </tr>
               {editIndex === idx && editError && (
-                <tr key={`error-${idx}`}>
+                <tr>
                   <td colSpan={7} className="text-red-600 text-sm p-2">
                     ⚠️ {editError}
                   </td>
