@@ -31,10 +31,12 @@ export default function BoqPage() {
   const [boqItems, setBoqItems] = useState<BoqItem[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedItem, setEditedItem] = useState<Partial<BoqItem>>({});
+  const [editError, setEditError] = useState<string | null>(null);
   const router = useRouter();
   const [loadingData, setLoadingData] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [userEmail, setUserEmail] = useState<string | null>(null);
+
 
 
   const sheetURL =
@@ -145,6 +147,17 @@ export default function BoqPage() {
     setEditedItem({});
   };
   
+  const handleEditChange = (field: keyof BoqItem, value: string | number) => {
+    if ((field === "Rate" || field === "Quantity") && Number.isNaN(Number(value))) {
+      setEditError(`Please enter a valid number for ${field}`);
+      return;
+    }
+    setEditError(null);
+    setEditedItem(prev => ({
+      ...prev,
+      [field]: field === "Rate" || field === "Quantity" ? Number(value) : value
+    }));
+  };
   
 
   // 📤 Download Excel
@@ -188,7 +201,7 @@ export default function BoqPage() {
               🔐 Go to Admin Panel
             </button>
           </div>
-        )}
+        )}  
 
         <h1 className="text-2xl font-bold mb-6">📋 BOQ Generator</h1>
 
@@ -371,6 +384,8 @@ export default function BoqPage() {
             </tr>
           </tfoot>
         </table>
+
+
 
         {boqItems.length > 0 && (
           <div className="flex justify-between mt-4">
