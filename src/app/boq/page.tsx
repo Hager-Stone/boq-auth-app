@@ -7,6 +7,7 @@ import { app } from '@/firebase/clientApp';
 import * as XLSX from 'xlsx';
 import AuthGuard from '@/components/AuthGuard';
 import UserInfo from '@/components/UserInfo';
+import ThemeToggle from '@/components/ThemeToggle';
 
 // Type definitions
 type SheetRow = {
@@ -189,6 +190,12 @@ export default function BoqPage() {
         <UserInfo />
         <h1 className="text-2xl font-bold mb-6">📋 BOQ Generator</h1>
 
+        <div className="p-6 max-w-5xl mx-auto">
+            <div className="flex justify-between items-center mb-4">
+            <ThemeToggle />
+          </div>
+        </div>
+
         <div className="flex gap-4 mb-6 flex-wrap">
           {/* Category Selector */}
           <div className="flex-1">
@@ -221,11 +228,11 @@ export default function BoqPage() {
           <div className="flex-1">
             <label className="block font-medium mb-1">Select Item:</label>
             <select
-              className="w-full border p-2 rounded"
-              onChange={(e) => {
-                const val = JSON.parse(e.target.value);
-                setSelectedItem(val);
-              }}
+             className="w-full border p-2 rounded bg-white text-black dark:bg-gray-800 dark:text-white"
+             onChange={(e) => {
+              const val = JSON.parse(e.target.value);
+              setSelectedItem(val);
+             }}
             >
               <option value="">-- Choose Item --</option>
               {itemList
@@ -355,7 +362,7 @@ export default function BoqPage() {
           </tbody>
 
           <tfoot>
-            <tr className="bg-gray-100">
+            <tr className="bg-gray-100 dark:bg-gray-800 text-black dark:text-white">
               <td colSpan={5} className="text-right font-semibold p-2">Total</td>
               <td className="font-semibold p-2">₹ {boqItems.reduce((sum, item) => sum + item.Amount, 0).toFixed(2)}</td>
               <td></td>
