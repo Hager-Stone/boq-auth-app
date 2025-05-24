@@ -31,7 +31,7 @@ export default function BoqPage() {
   const [boqItems, setBoqItems] = useState<BoqItem[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedItem, setEditedItem] = useState<Partial<BoqItem>>({});
-  const [setEditError] = useState<string | null>(null);
+  const [editError, setEditError] = useState<string | null>(null);
   const router = useRouter();
   const [loadingData, setLoadingData] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -350,6 +350,15 @@ export default function BoqPage() {
                     </>
                   ) : (
                     <>
+                      </>
+                      )}
+                      {editIndex === idx && editError && (
+                        <tr>
+                          <td colSpan={7} className="text-red-600 text-sm p-2">
+                            ⚠️ {editError}
+                          </td>
+                        </tr>
+                      )}
                      <td className="border p-2">{item.Category}</td>
                      <td className="border p-2">{item.Description}</td>
                      <td className="border p-2">{item.Unit}</td>
