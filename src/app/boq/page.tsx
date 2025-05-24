@@ -35,6 +35,7 @@ export default function BoqPage() {
   const router = useRouter();
   const [loadingData, setLoadingData] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
 
   const sheetURL =
@@ -46,6 +47,8 @@ export default function BoqPage() {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (!user) {
         router.push('/login');
+      } else {
+        setUserEmail(user.email);
       }
     });
 
@@ -188,6 +191,17 @@ export default function BoqPage() {
     <AuthGuard>
       <div className="p-6 max-w-5xl mx-auto">
         <UserInfo />
+        {userEmail === 'global@hagerstone.com' && (
+          <div className="mb-4 text-right">
+            <button
+              onClick={() => router.push('/admin')}
+              className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+            >
+              🔐 Go to Admin Panel
+            </button>
+          </div>
+        )}
+
         <h1 className="text-2xl font-bold mb-6">📋 BOQ Generator</h1>
 
         <div className="p-6 max-w-5xl mx-auto">
