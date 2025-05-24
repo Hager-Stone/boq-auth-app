@@ -146,17 +146,6 @@ export default function BoqPage() {
     setEditedItem({});
   };
   
-  const handleEditChange = (field: keyof BoqItem, value: string | number) => {
-    if ((field === "Rate" || field === "Quantity") && Number.isNaN(Number(value))) {
-      setEditError(`Please enter a valid number for ${field}`);
-      return;
-    }
-    setEditError(null);
-    setEditedItem(prev => ({
-      ...prev,
-      [field]: field === "Rate" || field === "Quantity" ? Number(value) : value
-    }));
-  };
   
 
   // 📤 Download Excel
@@ -383,12 +372,6 @@ export default function BoqPage() {
             </tr>
           </tfoot>
         </table>
-        {/* ✅ Show error message */}
-          {editError && (
-          <p className="text-red-600 text-sm mt-2">
-            ⚠️ {editError}
-          </p>
-        )}
 
         {boqItems.length > 0 && (
           <div className="flex justify-between mt-4">
