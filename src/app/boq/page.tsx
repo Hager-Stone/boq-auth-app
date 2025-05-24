@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -56,7 +57,7 @@ export default function BoqPage() {
         if (!res.ok) throw new Error('Failed to fetch sheet data');
         const data = await res.json();
         setSheetData(data);
-      } catch (error) {
+      } catch (_) {
         alert('Failed to load BOQ data. Please refresh the page.');
       } finally {
         setLoadingData(false);
