@@ -359,6 +359,7 @@ export default function BoqPage() {
                           </td>
                         </tr>
                       )}
+                    <>
                      <td className="border p-2">{item.Category}</td>
                      <td className="border p-2">{item.Description}</td>
                      <td className="border p-2">{item.Unit}</td>
