@@ -17,6 +17,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     let unsubscribeDoc: () => void;
 
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      console.log("🔥 Firebase Auth user:", user);
       if (!user?.email) {
         router.push('/login');
         return;
