@@ -320,7 +320,7 @@ export default function BoqPage() {
                      onChange={(e) => handleEditChange("Unit", e.target.value)}
                     />
                   </td>
-                  <td className="border p-2">\
+                  <td className="border p-2">
                     <input
                      type="number"
                      className="border p-1 w-full"
@@ -350,16 +350,6 @@ export default function BoqPage() {
                     </>
                   ) : (
                     <>
-                      </>
-                      )}
-                      {editIndex === idx && editError && (
-                        <tr>
-                          <td colSpan={7} className="text-red-600 text-sm p-2">
-                            ⚠️ {editError}
-                          </td>
-                        </tr>
-                      )}
-                    <>
                      <td className="border p-2">{item.Category}</td>
                      <td className="border p-2">{item.Description}</td>
                      <td className="border p-2">{item.Unit}</td>
@@ -385,6 +375,13 @@ export default function BoqPage() {
               </tr>
             ))}
           </tbody>
+          {editIndex === idx && editError && (
+          <tr key={`error-${idx}`}>
+            <td colSpan={7} className="text-red-600 text-sm p-2">              
+              ⚠️ {editError}
+            </td>
+          </tr>
+          )}
 
           <tfoot>
             <tr className="bg-gray-100 dark:bg-gray-800 text-black dark:text-white">
