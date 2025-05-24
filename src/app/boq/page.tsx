@@ -30,6 +30,7 @@ export default function BoqPage() {
   const [boqItems, setBoqItems] = useState<BoqItem[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedItem, setEditedItem] = useState<Partial<BoqItem>>({});
+  const [editError, setEditError] = useState<string | null>(null);
   const router = useRouter();
   const [loadingData, setLoadingData] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -47,20 +48,26 @@ export default function BoqPage() {
       }
     });
 
-    setLoadingData(true);
+    const fetchData = async () => {
+      try {
+        setLoadingData(true);
+        const res = await fetch(sheetURL);
+        if (!res.ok) {
+          throw new Error('Failed to fetch sheet data');
+        }
+        const data = await res.json();
+        setSheetData(data);
+      } catch (error) {
+        console.error('Sheet fetch error:', error);
+        alert('Failed to load BOQ data. Please try refreshing the page.');
+      } finally {
+        setLoadingData(false);
+      }
+    };
 
-    fetch(sheetURL)
-    .then(res => res.json())
-    .then(data => {
-      setSheetData(data);
-      setLoadingData(false);  // ✅ Loading complete
-    })
-    .catch(err => {
-      console.error('Sheet fetch error:', err);
-      setLoadingData(false);  // ❌ Even if error, stop loading
-    });
+    fetchData();
 
-  return () => unsub();
+    return () => unsub();
 }, []);
 
   // 🧠 Update item list when category changes
@@ -136,6 +143,11 @@ export default function BoqPage() {
   };
   
   const handleEditChange = (field: keyof BoqItem, value: string | number) => {
+    if ((field === "Rate" || field === "Quantity") && Number.isNaN(Number(value))) {
+      setEditError(`Please enter a valid number for ${field}`);
+      return;
+    }
+    setEditError(null);
     setEditedItem(prev => ({
       ...prev,
       [field]: field === "Rate" || field === "Quantity" ? Number(value) : value
@@ -144,11 +156,19 @@ export default function BoqPage() {
   
 
   // 📤 Download Excel
-  const downloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(boqItems);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'BOQ');
-    XLSX.writeFile(workbook, 'BOQ_Generated.xlsx');
+  const downloadExcel = async () => {
+    try {
+      setLoadingData(true);
+      const worksheet = XLSX.utils.json_to_sheet(boqItems);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'BOQ');
+      XLSX.writeFile(workbook, 'BOQ_Generated.xlsx');
+    } catch (error) {
+      console.error('Excel download failed:', error);
+      alert('Failed to download Excel file. Please try again.');
+    } finally {
+      setLoadingData(false);
+    }
   };
 
   const categories = Array.from(new Set(sheetData.map((item) => item.Category)));
