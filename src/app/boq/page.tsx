@@ -383,6 +383,12 @@ export default function BoqPage() {
             </tr>
           </tfoot>
         </table>
+        {/* ✅ Show error message */}
+          {editError && (
+          <p className="text-red-600 text-sm mt-2">
+            ⚠️ {editError}
+          </p>
+        )}
 
         {boqItems.length > 0 && (
           <div className="flex justify-between mt-4">
