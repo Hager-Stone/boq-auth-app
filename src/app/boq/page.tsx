@@ -31,7 +31,7 @@ export default function BoqPage() {
   const [boqItems, setBoqItems] = useState<BoqItem[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedItem, setEditedItem] = useState<Partial<BoqItem>>({});
-  const [editError, setEditError] = useState<string | null>(null);
+  const [setEditError] = useState<string | null>(null);
   const router = useRouter();
   const [loadingData, setLoadingData] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
