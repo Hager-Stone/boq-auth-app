@@ -373,15 +373,16 @@ export default function BoqPage() {
                   </>
                 )}
               </tr>
+              {editIndex === idx && editError && (
+                <tr key={`error-${idx}`}>
+                  <td colSpan={7} className="text-red-600 text-sm p-2">
+                    ⚠️ {editError}
+                  </td>
+                </tr>
+              )}
+            </>
             ))}
           </tbody>
-          {editIndex === idx && editError && (
-          <tr key={`error-${idx}`}>
-            <td colSpan={7} className="text-red-600 text-sm p-2">              
-              ⚠️ {editError}
-            </td>
-          </tr>
-          )}
 
           <tfoot>
             <tr className="bg-gray-100 dark:bg-gray-800 text-black dark:text-white">
