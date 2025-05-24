@@ -14,6 +14,8 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    let unsubscribeDoc: () => void;
+
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (!user?.email) {
         router.push('/login');
@@ -22,16 +24,14 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
       const email = user.email;
 
-      // ✅ Internal users: allow directly
       if (email.endsWith('@hagerstone.com')) {
         setAuthorized(true);
         return;
       }
 
-      // 🔁 External users: listen to access_requests
       const docRef = doc(db, 'access_requests', email);
 
-      const unsubscribeDoc = onSnapshot(docRef, (docSnap) => {
+      unsubscribeDoc = onSnapshot(docRef, (docSnap) => {
         if (!docSnap.exists()) {
           router.push(`/request-access?email=${email}`);
           return;
@@ -49,11 +49,11 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
       });
     });
 
-    // 🧼 Cleanup on component unmount
     return () => {
       unsubscribeAuth();
+      if (unsubscribeDoc) unsubscribeDoc();
     };
-  }, []);
+  }, [router]); // ✅ Add router to dependency array
 
   if (!authorized) return null;
 

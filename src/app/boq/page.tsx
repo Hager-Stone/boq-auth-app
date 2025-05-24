@@ -160,8 +160,6 @@ export default function BoqPage() {
       </div>
     );
   }
-
-  const totalAmount = boqItems.reduce((sum, item) => sum + item.Amount, 0);
   
 
   // ✅ Wrap everything in AuthGuard
