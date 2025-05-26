@@ -10,7 +10,6 @@ import AuthGuard from '@/components/AuthGuard';
 import UserInfo from '@/components/UserInfo';
 import ThemeToggle from '@/components/ThemeToggle';
 
-// Type definitions
 type SheetRow = {
   Category: string;
   Description: string;
@@ -57,7 +56,7 @@ export default function BoqPage() {
         if (!res.ok) throw new Error('Failed to fetch sheet data');
         const data = await res.json();
         setSheetData(data);
-      } catch (_) {
+      } catch {
         alert('Failed to load BOQ data. Please refresh the page.');
       } finally {
         setLoadingData(false);
@@ -66,7 +65,7 @@ export default function BoqPage() {
 
     fetchData();
     return () => unsub();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     const filtered = sheetData.filter((item) => item.Category === category);
@@ -176,6 +175,7 @@ export default function BoqPage() {
           <ThemeToggle />
         </div>
 
+        {/* Form Row */}
         <div className="flex gap-4 mb-6 flex-wrap">
           <div className="flex-1">
             <label className="block font-medium mb-1">Select Category:</label>
@@ -186,10 +186,12 @@ export default function BoqPage() {
               ))}
             </select>
           </div>
+
           <div className="flex-1">
             <label className="block font-medium mb-1">Search Items:</label>
             <input type="text" className="w-full border p-2 rounded" placeholder="Search by item name..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
           </div>
+
           <div className="flex-1">
             <label className="block font-medium mb-1">Select Item:</label>
             <select className="w-full border p-2 rounded bg-white text-black dark:bg-gray-800 dark:text-white" onChange={(e) => setSelectedItem(JSON.parse(e.target.value))}>
@@ -199,13 +201,18 @@ export default function BoqPage() {
               ))}
             </select>
           </div>
+
           <div className="w-40">
             <label className="block font-medium mb-1">Quantity:</label>
             <input type="number" className="w-full border p-2 rounded" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} />
           </div>
-          <button onClick={addItem} className="self-end bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">➕ Add to BOQ</button>
+
+          <button onClick={addItem} className="self-end bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            ➕ Add to BOQ
+          </button>
         </div>
 
+        {/* Table */}
         <table className="w-full border mt-4 text-sm">
           <thead>
             <tr className="bg-green-600 text-white">
